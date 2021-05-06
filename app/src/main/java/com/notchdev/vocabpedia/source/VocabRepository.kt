@@ -1,7 +1,7 @@
-package com.notchdev.vocabpedia.data.source
+package com.notchdev.vocabpedia.source
 
-import com.notchdev.vocabpedia.data.source.api.VocabClient
-import com.notchdev.vocabpedia.data.modal.Thesarus
+import com.notchdev.vocabpedia.source.api.VocabClient
+import com.notchdev.vocabpedia.source.api.modal.Thesarus
 
 object VocabRepository {
 

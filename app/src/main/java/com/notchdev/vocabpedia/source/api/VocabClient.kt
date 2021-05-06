@@ -1,4 +1,4 @@
-package com.notchdev.vocabpedia.data.source.api
+package com.notchdev.vocabpedia.source.api
 
 
 import retrofit2.Retrofit

@@ -1,6 +1,6 @@
 package com.notchdev.vocabpedia
 
-import com.notchdev.vocabpedia.data.source.api.VocabClient
+import com.notchdev.vocabpedia.source.api.VocabClient
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
@@ -16,7 +16,7 @@ class ExampleUnitTest {
     @Test
     fun getWord() {
         runBlocking {
-            val thesarus = VocabClient.vocabAPI.getMeaning(word = "surprised")
+            val thesarus = VocabClient.vocabAPI.getMeaning(word = "flabbergasted")
             assertNotNull(thesarus.body()?.get(0)?.meta)
         }
     }

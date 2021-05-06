@@ -1,4 +1,4 @@
-package com.notchdev.vocabpedia.data.modal
+package com.notchdev.vocabpedia.source.api.modal
 
 
 import com.google.gson.annotations.SerializedName
