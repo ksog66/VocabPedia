@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Vocabpedia</string>
+    <string name="api_token">35ef33eb-0ad2-4caa-802c-da478fb3393b</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
