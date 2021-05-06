@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_navigation">
+    <fragment
+        android:id="@+id/navigation_feed"
+        android:name="com.notchdev.vocabpedia.ui.FeedFragment"
+        android:label="Feed"
+        tools:layout="@layout/fragment_feed">
+        <action
+            android:id="@+id/action_navigate_to_navigation_word"
+            app:destination="@id/navigation_word">
+            <argument
+                android:name="@string/search_term"
+                app:argType="string"/>
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_word"
+        android:name="com.notchdev.vocabpedia.ui.WordFragment"
+        android:label="Word"
+        tools:layout="@layout/fragment_word" />
 
 </navigation>
