@@ -1,14 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.WordFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        <TextView
+            android:id="@+id/wordTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="FlabberGasted"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:textSize="50sp"/>
 
-</FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="6dp"
+        android:background="#808080" />
+    <LinearLayout
+        android:id="@+id/wordLl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="def:"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:textSize="40sp"/>
+
+        <TextView
+            android:id="@+id/defTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="affected with sudden and great wonder or surprise"
+            android:textSize="24sp"/>
+
+        <Button
+            android:id="@+id/addWordBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add it to Your List"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/wordErrorTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Couldn't find the word in the dictionary"
+        android:layout_margin="8dp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible"
+        tools:visibility="visible"/>
+</LinearLayout>
