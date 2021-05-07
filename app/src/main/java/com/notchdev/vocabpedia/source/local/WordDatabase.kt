@@ -12,18 +12,20 @@ abstract class WordDatabase: RoomDatabase() {
 
     companion object {
 
-        private var INSTANCE: WordDatabase? = null
+        @Volatile
+        private var instance: WordDatabase? = null
 
-        fun getDatabase(context: Context) : WordDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    WordDatabase::class.java,
-                    "word.db"
-                ).build()
-                INSTANCE = instance
-                instance
-            }
+        private val LOCK= Any()
+
+        operator fun invoke(context: Context) = instance ?: synchronized(LOCK){
+            instance ?: createDatabase(context).also{ instance =it }
         }
+
+        private fun createDatabase(context: Context) =
+            Room.databaseBuilder(
+                context.applicationContext,
+                WordDatabase::class.java,
+                "word.db"
+            ).build()
     }
 }

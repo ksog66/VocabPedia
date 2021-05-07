@@ -6,12 +6,13 @@ import com.notchdev.vocabpedia.source.api.modal.Thesarus
 import com.notchdev.vocabpedia.source.api.modal.ThesarusItem
 import com.notchdev.vocabpedia.source.local.Word
 import com.notchdev.vocabpedia.source.local.WordDao
+import com.notchdev.vocabpedia.source.local.WordDatabase
 
 class VocabRepository(
-    private val wordDao: WordDao
+    private val db: WordDatabase
 ) {
 
-    val allWord: LiveData<List<Word>> = wordDao.getAllWord()
+    val allWords: LiveData<List<Word>> = db.getWordDao().getAllWord()
 
     suspend fun getKeyword(word: String): ThesarusItem? {
         val response = VocabClient.vocabAPI.getMeaning(word = word)
@@ -19,7 +20,7 @@ class VocabRepository(
     }
 
     suspend fun addWord(term: String, shortDef: String) {
-        wordDao.insert(
+        db.getWordDao().insert(
             Word(
                 term = term,
                 shorDef = shortDef

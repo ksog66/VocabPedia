@@ -1,29 +1,45 @@
 package com.notchdev.vocabpedia.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.notchdev.vocabpedia.R
 import com.notchdev.vocabpedia.VocabViewModel
+import com.notchdev.vocabpedia.VocabViewModelFactory
+import com.notchdev.vocabpedia.WordAdapter
 import com.notchdev.vocabpedia.databinding.FragmentFeedBinding
+import com.notchdev.vocabpedia.source.VocabRepository
+import com.notchdev.vocabpedia.source.local.WordDatabase
 
 
 class FeedFragment : Fragment(),androidx.appcompat.widget.SearchView.OnQueryTextListener {
 
     private var _binding:FragmentFeedBinding? = null
-    private val viewModel:VocabViewModel by activityViewModels()
+    private lateinit var viewModel:VocabViewModel
+    private lateinit var wordAdapter: WordAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFeedBinding.inflate(layoutInflater)
+        val vocabRepository = VocabRepository(WordDatabase(requireContext()))
+        val viewModelProviderFactory = VocabViewModelFactory(activity?.application!!,vocabRepository)
+        viewModel = ViewModelProvider(this,viewModelProviderFactory).get(VocabViewModel::class.java)
 
+        wordAdapter = WordAdapter()
+
+        _binding?.roomRv?.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = wordAdapter
+        }
         return _binding?.root
     }
 
@@ -31,6 +47,12 @@ class FeedFragment : Fragment(),androidx.appcompat.widget.SearchView.OnQueryText
         super.onViewCreated(view, savedInstanceState)
         _binding?.apply {
             wordSv.setOnQueryTextListener(this@FeedFragment)
+        }
+        viewModel.allWord.observe({lifecycle}) {
+            it?.let {
+                wordAdapter.update(it)
+                Log.d("FeedFragment",it.toString())
+            }
         }
     }
 
