@@ -9,7 +9,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.notchdev.vocabpedia.R
 import com.notchdev.vocabpedia.VocabViewModel
 import com.notchdev.vocabpedia.VocabViewModelFactory

@@ -24,11 +24,10 @@ class WordFragment : Fragment() {
 
     private lateinit var viewModel: VocabViewModel
     private var word: String? = null
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentWordBinding.inflate(layoutInflater)
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         val vocabRepository = VocabRepository(WordDatabase(requireContext()))
         val viewModelProviderFactory =
             VocabViewModelFactory(activity?.application!!, vocabRepository)
@@ -38,6 +37,31 @@ class WordFragment : Fragment() {
             word = getString(getString(R.string.search_term))
         }
         getWord()
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentWordBinding.inflate(layoutInflater)
+
+        viewModel.isLoading.observe({lifecycle}) {
+            it?.let {
+                if(it) {
+                    _binding?.apply {
+                        wordLl.visibility = View.INVISIBLE
+                        loadingPb.visibility = View.VISIBLE
+                    }
+                } else {
+                    _binding?.apply {
+                        wordLl.visibility = View.VISIBLE
+                        loadingPb.visibility = View.INVISIBLE
+                    }
+                }
+            }
+        }
+
         return _binding?.root
     }
 
@@ -54,10 +78,25 @@ class WordFragment : Fragment() {
                     wordLl.visibility = View.VISIBLE
                     defTv.text = it.shortdef[0]
                 }
-            } else {
-                _binding?.apply {
-                    wordLl.visibility = View.INVISIBLE
-                    wordErrorTv.visibility = View.VISIBLE
+            }
+        }
+
+        viewModel.dataFetchState.observe({lifecycle}) {
+            it?.let {
+                if(!it) {
+                    _binding?.apply {
+                        wordLl.visibility = View.INVISIBLE
+                        loadingPb.visibility = View.INVISIBLE
+                        wordErrorTv.apply {
+                            visibility = View.VISIBLE
+                            text = "Couldn't find $word in the dictionary"
+                        }
+                    }
+                } else {
+                    _binding?.apply {
+                        wordLl.visibility = View.VISIBLE
+                        wordErrorTv.visibility = View.INVISIBLE
+                    }
                 }
             }
         }
@@ -65,10 +104,11 @@ class WordFragment : Fragment() {
         _binding?.apply {
             addWordBtn.setOnClickListener {
                 val shortDef = defTv.text.toString()
-                Log.d("WordFragment",shortDef)
+                Log.d("WordFragment", shortDef)
                 viewModel.addWord(word!!, shortDef)
             }
         }
+
     }
 
     override fun onDestroyView() {
