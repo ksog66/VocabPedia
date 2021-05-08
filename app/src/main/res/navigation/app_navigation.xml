@@ -6,7 +6,7 @@
     android:id="@+id/app_navigation">
     <fragment
         android:id="@+id/navigation_feed"
-        android:name="com.notchdev.vocabpedia.ui.FeedFragment"
+        android:name="com.notchdev.vocabpedia.ui.Feed.FeedFragment"
         android:label="Feed"
         tools:layout="@layout/fragment_feed">
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/navigation_word"
-        android:name="com.notchdev.vocabpedia.ui.WordFragment"
+        android:name="com.notchdev.vocabpedia.ui.Word.WordFragment"
         android:label="Word"
         tools:layout="@layout/fragment_word" />
 

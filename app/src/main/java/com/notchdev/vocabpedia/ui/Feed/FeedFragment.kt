@@ -1,4 +1,4 @@
-package com.notchdev.vocabpedia.ui
+package com.notchdev.vocabpedia.ui.Feed
 
 import android.os.Bundle
 import android.util.Log

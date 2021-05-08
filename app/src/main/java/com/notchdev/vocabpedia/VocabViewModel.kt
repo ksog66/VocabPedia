@@ -2,18 +2,20 @@ package com.notchdev.vocabpedia
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.notchdev.vocabpedia.source.VocabRepository
 import com.notchdev.vocabpedia.source.api.modal.ThesarusItem
 import com.notchdev.vocabpedia.source.local.Word
-import com.notchdev.vocabpedia.source.local.WordDatabase
+import com.notchdev.vocabpedia.util.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import com.notchdev.vocabpedia.util.Result
 
 class VocabViewModel(
     app: Application,
-    val repository: VocabRepository
+    private val repository: VocabRepository
 ) : AndroidViewModel(app) {
 
     private val _wordData = MutableLiveData<ThesarusItem>()
@@ -25,11 +27,7 @@ class VocabViewModel(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading:LiveData<Boolean> = _isLoading
 
-    val allWord: LiveData<List<Word>>
-
-    init {
-        allWord = repository.allWords
-    }
+    val allWord: LiveData<List<Word>> = repository.allWords
 
 
     fun searchWord(searchTerm: String) {

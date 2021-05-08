@@ -1,4 +1,4 @@
-package com.notchdev.vocabpedia.ui
+package com.notchdev.vocabpedia.ui.Word
 
 import android.opengl.Visibility
 import android.os.Bundle
