@@ -12,7 +12,7 @@ import com.notchdev.vocabpedia.data.source.local.WordDatabase
 class QuizViewModel(application: Application) : AndroidViewModel(application) {
     private val localRepository: LocalWordRepository
     val allWord: LiveData<List<Word>>
-    
+
     init {
         val dao = WordDatabase(application).getWordDao()
         localRepository = LocalWordRepository(dao)
