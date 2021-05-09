@@ -1,9 +1,10 @@
-package com.notchdev.vocabpedia.source.local
+package com.notchdev.vocabpedia.data.source.local
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.notchdev.vocabpedia.data.model.Word
 
 @Database(entities = arrayOf(Word::class),version = 1, exportSchema = true)
 abstract class WordDatabase: RoomDatabase() {

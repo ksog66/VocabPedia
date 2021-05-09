@@ -1,4 +1,4 @@
-package com.notchdev.vocabpedia.source.local
+package com.notchdev.vocabpedia.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

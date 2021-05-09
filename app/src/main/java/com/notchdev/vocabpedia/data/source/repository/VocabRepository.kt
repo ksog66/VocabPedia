@@ -1,11 +1,11 @@
-package com.notchdev.vocabpedia.source
+package com.notchdev.vocabpedia.data.source.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.notchdev.vocabpedia.source.api.VocabClient
-import com.notchdev.vocabpedia.source.api.modal.ThesarusItem
-import com.notchdev.vocabpedia.source.local.Word
-import com.notchdev.vocabpedia.source.local.WordDatabase
+import com.notchdev.vocabpedia.data.source.api.VocabClient
+import com.notchdev.vocabpedia.data.model.ThesarusItem
+import com.notchdev.vocabpedia.data.model.Word
+import com.notchdev.vocabpedia.data.source.local.WordDatabase
 import com.notchdev.vocabpedia.util.Result
 class VocabRepository(
     private val db: WordDatabase

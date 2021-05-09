@@ -6,9 +6,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.notchdev.vocabpedia.source.VocabRepository
-import com.notchdev.vocabpedia.source.api.modal.ThesarusItem
-import com.notchdev.vocabpedia.source.local.Word
+import com.notchdev.vocabpedia.data.source.repository.VocabRepository
+import com.notchdev.vocabpedia.data.model.ThesarusItem
+import com.notchdev.vocabpedia.data.model.Word
 import com.notchdev.vocabpedia.util.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

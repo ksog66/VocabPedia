@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.notchdev.vocabpedia.databinding.WordListItemBinding
-import com.notchdev.vocabpedia.source.local.Word
+import com.notchdev.vocabpedia.data.model.Word
 
 class WordAdapter: RecyclerView.Adapter<WordAdapter.WordViewHolder>() {
 

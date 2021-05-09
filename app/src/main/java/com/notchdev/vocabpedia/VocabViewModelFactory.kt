@@ -3,7 +3,7 @@ package com.notchdev.vocabpedia
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.notchdev.vocabpedia.source.VocabRepository
+import com.notchdev.vocabpedia.data.source.repository.VocabRepository
 
 class VocabViewModelFactory(
     private val app: Application,

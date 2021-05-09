@@ -6,7 +6,7 @@
     android:id="@+id/app_navigation">
     <fragment
         android:id="@+id/navigation_feed"
-        android:name="com.notchdev.vocabpedia.ui.Feed.FeedFragment"
+        android:name="com.notchdev.vocabpedia.ui.feed.FeedFragment"
         android:label="Feed"
         tools:layout="@layout/fragment_feed">
         <action
@@ -16,12 +16,21 @@
                 android:name="@string/search_term"
                 app:argType="string"/>
         </action>
+        <action
+            android:id="@+id/action_navigate_to_navigation_quiz"
+            app:destination="@id/navigation_quiz" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_word"
-        android:name="com.notchdev.vocabpedia.ui.Word.WordFragment"
+        android:name="com.notchdev.vocabpedia.ui.word.WordFragment"
         android:label="Word"
         tools:layout="@layout/fragment_word" />
+
+    <fragment
+        android:id="@+id/navigation_quiz"
+        android:name="com.notchdev.vocabpedia.ui.quiz.QuizFragment"
+        android:label="Quiz"
+        tools:layout="@layout/fragment_quiz"/>
 
 </navigation>

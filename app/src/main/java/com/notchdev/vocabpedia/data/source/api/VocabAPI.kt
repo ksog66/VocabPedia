@@ -1,7 +1,7 @@
-package com.notchdev.vocabpedia.source.api
+package com.notchdev.vocabpedia.data.source.api
 
 import com.notchdev.vocabpedia.BuildConfig
-import com.notchdev.vocabpedia.source.api.modal.Thesarus
+import com.notchdev.vocabpedia.data.model.Thesarus
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

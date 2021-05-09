@@ -1,20 +1,18 @@
-package com.notchdev.vocabpedia.ui.Word
+package com.notchdev.vocabpedia.ui.word
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.notchdev.vocabpedia.R
 import com.notchdev.vocabpedia.VocabViewModel
 import com.notchdev.vocabpedia.VocabViewModelFactory
 import com.notchdev.vocabpedia.databinding.FragmentWordBinding
-import com.notchdev.vocabpedia.source.VocabRepository
-import com.notchdev.vocabpedia.source.local.WordDatabase
+import com.notchdev.vocabpedia.data.source.repository.VocabRepository
+import com.notchdev.vocabpedia.data.source.local.WordDatabase
 
 
 class WordFragment : Fragment() {

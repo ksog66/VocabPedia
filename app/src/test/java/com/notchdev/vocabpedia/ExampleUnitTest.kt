@@ -1,6 +1,6 @@
 package com.notchdev.vocabpedia
 
-import com.notchdev.vocabpedia.source.api.VocabClient
+import com.notchdev.vocabpedia.data.source.api.VocabClient
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
