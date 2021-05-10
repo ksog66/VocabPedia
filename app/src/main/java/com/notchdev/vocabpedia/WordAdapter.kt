@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.notchdev.vocabpedia.databinding.WordListItemBinding
 import com.notchdev.vocabpedia.data.model.Word
+import java.util.*
+import kotlin.collections.ArrayList
 
 class WordAdapter: RecyclerView.Adapter<WordAdapter.WordViewHolder>() {
 
@@ -23,7 +25,7 @@ class WordAdapter: RecyclerView.Adapter<WordAdapter.WordViewHolder>() {
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         WordListItemBinding.bind(holder.itemView).apply {
             val word = allWord[position]
-            wordLocalTv.text = word.term
+            wordLocalTv.text = word.term.capitalize(Locale.ROOT)
             defLocalTv.text = word.shorDef
         }
     }

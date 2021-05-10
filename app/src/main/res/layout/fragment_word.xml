@@ -4,12 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/bg_color"
     tools:context=".ui.word.WordFragment">
 
         <TextView
             android:id="@+id/wordTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             tools:text="FlabberGasted"
             style="@style/TextAppearance.AppCompat.Large"
             android:textSize="50sp"/>
@@ -18,7 +20,7 @@
         android:id="@+id/horizontalV"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="6dp"
         android:background="#808080"
@@ -34,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="def:"
+            android:textColor="@android:color/darker_gray"
             style="@style/TextAppearance.AppCompat.Small"
             android:textSize="40sp"/>
 
@@ -41,6 +44,8 @@
             android:id="@+id/defTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColorHint="@android:color/holo_green_light"
+            android:textColor="@android:color/holo_green_dark"
             android:hint="affected with sudden and great wonder or surprise"
             android:textSize="24sp"/>
 
@@ -49,7 +54,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add it to Your List"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="100dp"/>
 
     </LinearLayout>
 
@@ -59,8 +65,12 @@
         android:id="@+id/wordErrorTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:textSize="55sp"
+        android:textStyle="bold|italic"
         android:text="Couldn't find the word in the dictionary"
         android:layout_margin="8dp"
+        android:textColor="#fcc201"
         android:layout_gravity="center_horizontal"
         android:visibility="invisible"
         tools:visibility="visible"

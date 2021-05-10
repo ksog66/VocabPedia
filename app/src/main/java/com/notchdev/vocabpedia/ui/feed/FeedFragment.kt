@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +20,7 @@ import com.notchdev.vocabpedia.data.source.repository.VocabRepository
 import com.notchdev.vocabpedia.data.source.local.WordDatabase
 
 
-class FeedFragment : Fragment(),androidx.appcompat.widget.SearchView.OnQueryTextListener {
+class FeedFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private var _binding:FragmentFeedBinding? = null
     private lateinit var viewModel:VocabViewModel
