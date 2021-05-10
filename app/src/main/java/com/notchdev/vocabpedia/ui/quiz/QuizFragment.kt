@@ -1,6 +1,6 @@
 package com.notchdev.vocabpedia.ui.quiz
 
-import android.app.AlertDialog
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
@@ -8,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
-import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.notchdev.vocabpedia.R
 import com.notchdev.vocabpedia.data.model.Quiz
 import com.notchdev.vocabpedia.data.model.Word
@@ -24,8 +26,8 @@ class QuizFragment : Fragment() {
     private lateinit var viewModel: QuizViewModel
     private var quizList = ArrayList<Quiz>()
     private var currentPosition: Int = 0
-    private var result: MutableList<Boolean> = mutableListOf()
-    private lateinit var checkedPos:Array<Int>
+    private lateinit var result: Array<Boolean>
+    private lateinit var checkedPos: IntArray
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(
@@ -39,6 +41,23 @@ class QuizFragment : Fragment() {
                 Log.d("quiz", it.toString())
             }
         }
+
+        activity?.onBackPressedDispatcher?.addCallback(this,object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                MaterialAlertDialogBuilder(requireContext()).apply {
+                    setMessage("Are you sure you want to go back?")
+                    setPositiveButton("Yes") {_,_ ->
+                        findNavController().popBackStack()
+                    }
+                    setNegativeButton("Cancel") { dialog,_ ->
+                        dialog.dismiss()
+                    }
+                    setCancelable(false)
+                    create()
+                    show()
+                }
+            }
+        })
     }
 
     private fun convertWordToQuiz(wordList: List<Word>) {
@@ -62,14 +81,15 @@ class QuizFragment : Fragment() {
 
     private fun initQuiz() {
 
-        checkedPos = Array(quizList.size) { -1 }
+        checkedPos = IntArray(quizList.size) { -1 }
+        result = Array(quizList.size) { false }
         quizList.shuffle()
+        currentPosition = 0
         val quiz = quizList[0]
         updateUI(quiz)
-        currentPosition = 0
-        result.clear()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateUI(quiz: Quiz) {
         _binding?.apply {
             questionNoTv.text = "Question: ${quizList.indexOf(quiz) + 1}/${quizList.size}"
@@ -79,11 +99,15 @@ class QuizFragment : Fragment() {
             rb2.text = option[1]
             rb3.text = option[2]
             rb4.text = option[3]
-            if (checkedPos[currentPosition] == -1) {
-                optionRg.clearCheck()
-            } else {
-                optionRg.check(checkedPos[currentPosition])
-            }
+//
+                val checkId = when (checkedPos[currentPosition]) {
+                    0 -> R.id.rb1
+                    1 -> R.id.rb2
+                    2 -> R.id.rb3
+                    3 -> R.id.rb4
+                    else -> -1
+                }
+                optionRg.check(checkId)
             nextBtn.text = if (currentPosition == quizList.size - 1) "Submit" else "Next"
         }
     }
@@ -115,37 +139,48 @@ class QuizFragment : Fragment() {
                 }
             }
             optionRg.setOnCheckedChangeListener { _, checkedId ->
-                checkAnswer(checkedId)
+                when (checkedId) {
+                    R.id.rb1 -> checkAnswer(0)
+                    R.id.rb2 -> checkAnswer(1)
+                    R.id.rb3 -> checkAnswer(2)
+                    R.id.rb4 -> checkAnswer(3)
+                    -1 -> checkAnswer(-1)
+                }
             }
         }
     }
 
     private fun checkAnswer(checkedId: Int) {
         checkedPos[currentPosition] = checkedId
-        result.add(quizList[currentPosition].answer == checkedId)
-        Log.d("quiz","$currentPosition")
+        result[currentPosition] = (quizList[currentPosition].answer == checkedId)
+        Log.d("quiz2", "$currentPosition")
+        Log.d("quiz2", "${checkedPos[currentPosition]}")
     }
 
+    @SuppressLint("SetTextI18n")
     private fun submitAnswer() {
         var score = 0
         result.forEach { answer ->
             if (answer) score++
+            Log.d("quiz1", "$score")
         }
         val alertDialog = Dialog(requireContext())
         alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         alertDialog.setCancelable(false)
-        alertDialog.setContentView(R.layout.score_dialog_layout)
-        val scoreText = alertDialog.findViewById(R.id.scoreTv) as TextView
-        scoreText.text = "$score/${quizList.size}"
-        val totalQuestion = alertDialog.findViewById(R.id.questionNoTv) as TextView
-        totalQuestion.text = "${quizList.size}"
+        val dialogBinding = ScoreDialogLayoutBinding.inflate(LayoutInflater.from(context))
+        alertDialog.setContentView(dialogBinding.root)
 
-        val retakeButton = alertDialog.findViewById(R.id.retakeBtn) as Button
-        retakeButton.setOnClickListener {
-            initQuiz()
+        dialogBinding.apply {
+            scoreTv.text = "$score/${quizList.size}"
+            noOfQuestionTv.text = "${quizList.size}"
+            retakeBtn.setOnClickListener {
+                alertDialog.dismiss()
+                initQuiz()
+            }
         }
         alertDialog.show()
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
