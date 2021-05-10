@@ -24,7 +24,8 @@ class QuizFragment : Fragment() {
     private lateinit var viewModel: QuizViewModel
     private var quizList = ArrayList<Quiz>()
     private var currentPosition: Int = 0
-    private var result: MutableList<Pair<Boolean, Int>> = mutableListOf()
+    private var result: MutableList<Boolean> = mutableListOf()
+    private lateinit var checkedPos:Array<Int>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(
@@ -60,6 +61,8 @@ class QuizFragment : Fragment() {
     }
 
     private fun initQuiz() {
+
+        checkedPos = Array(quizList.size) { -1 }
         quizList.shuffle()
         val quiz = quizList[0]
         updateUI(quiz)
@@ -76,8 +79,10 @@ class QuizFragment : Fragment() {
             rb2.text = option[1]
             rb3.text = option[2]
             rb4.text = option[3]
-            if (currentPosition < result.size && result[currentPosition] != null) {
-                optionRg.check(result[currentPosition].second)
+            if (checkedPos[currentPosition] == -1) {
+                optionRg.clearCheck()
+            } else {
+                optionRg.check(checkedPos[currentPosition])
             }
             nextBtn.text = if (currentPosition == quizList.size - 1) "Submit" else "Next"
         }
@@ -109,27 +114,22 @@ class QuizFragment : Fragment() {
                     updateUI(quizList[currentPosition])
                 }
             }
-            if (optionRg.checkedRadioButtonId != -1) {
-                optionRg.setOnCheckedChangeListener { _, checkedId ->
-                    checkAnswer(checkedId)
-                }
+            optionRg.setOnCheckedChangeListener { _, checkedId ->
+                checkAnswer(checkedId)
             }
-
         }
     }
 
     private fun checkAnswer(checkedId: Int) {
-        val pair = Pair(
-            quizList[currentPosition].answer == checkedId
-        ,checkedId
-        )
-        result.add(pair)
+        checkedPos[currentPosition] = checkedId
+        result.add(quizList[currentPosition].answer == checkedId)
+        Log.d("quiz","$currentPosition")
     }
 
     private fun submitAnswer() {
         var score = 0
         result.forEach { answer ->
-            if (answer.first) score++
+            if (answer) score++
         }
         val alertDialog = Dialog(requireContext())
         alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
