@@ -18,7 +18,7 @@ class VocabViewModel(
     private val repository: VocabRepository
 ) : AndroidViewModel(app) {
 
-    private val _wordData = MutableLiveData<ThesarusItem>()
+    private val _wordData = MutableLiveData<ThesarusItem>(null)
     val wordData: LiveData<ThesarusItem> = _wordData
 
     private val _dataFetchState = MutableLiveData<Boolean>()

@@ -3,4 +3,6 @@
     <string name="search_term">word</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fetch_error">Couldn\'t find %s in the dictionary,Try Another Word</string>
+    <string name="add_word">Search Word &amp; Add It In Your Feed</string>
 </resources>

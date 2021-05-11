@@ -55,10 +55,25 @@
             android:background="#808080" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/roomRv"
+            android:id="@+id/feedRv"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/loadWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:textSize="55sp"
+        android:textStyle="bold"
+        android:text="@string/add_word"
+        android:layout_margin="8dp"
+        android:textColor="@android:color/holo_blue_bright"
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:layout_centerInParent="true"/>
 
 
 </RelativeLayout>

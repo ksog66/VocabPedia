@@ -18,7 +18,7 @@ class VocabRepository(
             val response = VocabClient.vocabAPI.getMeaning(word)
             if(response.isSuccessful) {
                 val result = response.body()?.get(0)
-                Log.i("repo","${result.toString()} succesful")
+                Log.i("repo","${result.toString()} successful")
                 Result.Success(result)
             } else {
                 Log.i("repo","@null")
