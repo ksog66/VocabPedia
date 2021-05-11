@@ -19,6 +19,7 @@ import com.notchdev.vocabpedia.WordAdapter
 import com.notchdev.vocabpedia.databinding.FragmentFeedBinding
 import com.notchdev.vocabpedia.data.source.repository.VocabRepository
 import com.notchdev.vocabpedia.data.source.local.WordDatabase
+import java.util.*
 
 
 class FeedFragment : Fragment(), SearchView.OnQueryTextListener, TextToSpeech.OnInitListener {
@@ -26,10 +27,11 @@ class FeedFragment : Fragment(), SearchView.OnQueryTextListener, TextToSpeech.On
     private var _binding:FragmentFeedBinding? = null
     private lateinit var viewModel:VocabViewModel
     private lateinit var wordAdapter: WordAdapter
-    private val textToSpeech by lazy {
-        TextToSpeech(context,this)
+    private lateinit var textToSpeech:TextToSpeech
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        textToSpeech = TextToSpeech(activity,this)
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -91,16 +93,27 @@ class FeedFragment : Fragment(), SearchView.OnQueryTextListener, TextToSpeech.On
     }
 
     override fun onInit(status: Int) {
+        if(status == TextToSpeech.SUCCESS) {
 
+            val result = textToSpeech.setLanguage(Locale.US)
+            if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS","The Language specified is not supported!")
+            }
+        } else {
+            Log.e("TTS", "Initilization Failed!")
+        }
     }
 
     override fun onDestroyView() {
         _binding = null
+        super.onDestroyView()
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
         if(textToSpeech!=null) {
             textToSpeech.stop()
             textToSpeech.shutdown()
         }
-        super.onDestroyView()
     }
 }
