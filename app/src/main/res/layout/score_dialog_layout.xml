@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/card_bg_color">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,44 +14,59 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Total Question :"
+        android:textColor="#C0C0C0"
         style="@style/TextAppearance.AppCompat.Large"
-        android:textSize="55sp"/>
+        android:textSize="40sp"/>
 
         <TextView
             android:id="@+id/noOfQuestionTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="17"
-            android:textColorHint="#f44f86"
+            android:textColorHint="@android:color/holo_red_light"
             style="@style/TextAppearance.MaterialComponents.Caption"
-            android:textSize="50sp"
-            android:textColor="#f44f86"
+            android:textSize="45sp"
+            android:textColor="@android:color/holo_red_light"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Score :"
+            android:textColor="#C0C0C0"
             style="@style/TextAppearance.AppCompat.Large"
-            android:textSize="55sp" />
+            android:textSize="40sp" />
 
         <TextView
             android:id="@+id/scoreTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="15/17"
-            android:textColorHint="#f44f86"
+            android:textColorHint="@android:color/holo_green_dark"
             style="@style/TextAppearance.MaterialComponents.Caption"
-            android:textSize="50sp"
-            android:textColor="#f44f86"
+            android:textSize="45sp"
+            android:textColor="@android:color/holo_green_dark"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/retakeBtn"
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Retake Quiz"/>
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/retakeBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Retake Quiz"/>
+
+            <Button
+                android:id="@+id/exitBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Go Back"
+                android:layout_alignParentEnd="true"/>
+
+        </RelativeLayout>
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

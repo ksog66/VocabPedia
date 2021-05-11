@@ -1,6 +1,7 @@
 package com.notchdev.vocabpedia.ui.feed
 
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,11 +21,14 @@ import com.notchdev.vocabpedia.data.source.repository.VocabRepository
 import com.notchdev.vocabpedia.data.source.local.WordDatabase
 
 
-class FeedFragment : Fragment(), SearchView.OnQueryTextListener {
+class FeedFragment : Fragment(), SearchView.OnQueryTextListener, TextToSpeech.OnInitListener {
 
     private var _binding:FragmentFeedBinding? = null
     private lateinit var viewModel:VocabViewModel
     private lateinit var wordAdapter: WordAdapter
+    private val textToSpeech by lazy {
+        TextToSpeech(context,this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +39,7 @@ class FeedFragment : Fragment(), SearchView.OnQueryTextListener {
         val viewModelProviderFactory = VocabViewModelFactory(activity?.application!!,vocabRepository)
         viewModel = ViewModelProvider(this,viewModelProviderFactory).get(VocabViewModel::class.java)
 
-        wordAdapter = WordAdapter()
+        wordAdapter = WordAdapter { onAudioClicked(it)}
 
         _binding?.roomRv?.apply {
             layoutManager = LinearLayoutManager(context)
@@ -82,8 +86,21 @@ class FeedFragment : Fragment(), SearchView.OnQueryTextListener {
         )
     }
 
+    private fun onAudioClicked(word:String) {
+        textToSpeech.speak(word,TextToSpeech.QUEUE_FLUSH,null)
+    }
+
+    override fun onInit(status: Int) {
+
+    }
+
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+
+        if(textToSpeech!=null) {
+            textToSpeech.stop()
+            textToSpeech.shutdown()
+        }
+        super.onDestroyView()
     }
 }

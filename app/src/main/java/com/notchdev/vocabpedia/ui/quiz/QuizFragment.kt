@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -19,6 +20,8 @@ import com.notchdev.vocabpedia.data.model.Quiz
 import com.notchdev.vocabpedia.data.model.Word
 import com.notchdev.vocabpedia.databinding.FragmentQuizBinding
 import com.notchdev.vocabpedia.databinding.ScoreDialogLayoutBinding
+import java.util.*
+import kotlin.collections.ArrayList
 
 class QuizFragment : Fragment() {
 
@@ -93,12 +96,12 @@ class QuizFragment : Fragment() {
     private fun updateUI(quiz: Quiz) {
         _binding?.apply {
             questionNoTv.text = "Question: ${quizList.indexOf(quiz) + 1}/${quizList.size}"
-            questionTv.text = quiz.question
+            questionTv.text = quiz.question.capitalize(Locale.ROOT)
             val option = quiz.option
-            rb1.text = option[0]
-            rb2.text = option[1]
-            rb3.text = option[2]
-            rb4.text = option[3]
+            rb1.text = option[0].capitalize(Locale.ROOT)
+            rb2.text = option[1].capitalize(Locale.ROOT)
+            rb3.text = option[2].capitalize(Locale.ROOT)
+            rb4.text = option[3].capitalize(Locale.ROOT)
 //
                 val checkId = when (checkedPos[currentPosition]) {
                     0 -> R.id.rb1
@@ -136,6 +139,8 @@ class QuizFragment : Fragment() {
                 if (currentPosition != 0) {
                     --currentPosition
                     updateUI(quizList[currentPosition])
+                } else {
+                    Toast.makeText(context, "Question No 0 Does Not exist", Toast.LENGTH_SHORT).show()
                 }
             }
             optionRg.setOnCheckedChangeListener { _, checkedId ->
@@ -176,6 +181,10 @@ class QuizFragment : Fragment() {
             retakeBtn.setOnClickListener {
                 alertDialog.dismiss()
                 initQuiz()
+            }
+            exitBtn.setOnClickListener {
+                findNavController().popBackStack()
+                alertDialog.dismiss()
             }
         }
         alertDialog.show()

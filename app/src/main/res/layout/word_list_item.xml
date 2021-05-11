@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:text="Word"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:drawableEnd="@drawable/ic_speaker" />
 
         <TextView
             android:id="@+id/defLocalTv"

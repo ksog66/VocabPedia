@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_color"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.quiz.QuizFragment">
 
@@ -12,6 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:hint="Question 1/10"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,6 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:hint="Question"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
         style="@style/TextAppearance.AppCompat.Large"
         android:textSize="55sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,26 +46,42 @@
         <RadioButton
             android:id="@+id/rb1"
             android:hint="Option1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@drawable/radio_background"/>
 
         <RadioButton
             android:id="@+id/rb2"
             android:hint="Option2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@drawable/radio_background"/>
 
         <RadioButton
             android:id="@+id/rb3"
             android:hint="Option3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@drawable/radio_background"/>
 
         <RadioButton
             android:id="@+id/rb4"
             android:hint="Option4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@drawable/radio_background"/>
 
     </RadioGroup>
 
