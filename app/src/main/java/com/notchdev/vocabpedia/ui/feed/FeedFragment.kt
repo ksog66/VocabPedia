@@ -86,6 +86,7 @@ class FeedFragment : Fragment(), SearchView.OnQueryTextListener, TextToSpeech.On
                         feedRv.visibility = View.GONE
                     }
                 } else {
+                    listSize = items.size
                     wordAdapter.update(it)
                     _binding?.apply {
                         loadWord.visibility = View.GONE

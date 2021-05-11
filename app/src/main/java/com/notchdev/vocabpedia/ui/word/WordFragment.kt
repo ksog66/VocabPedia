@@ -102,6 +102,8 @@ class WordFragment : Fragment(),SearchView.OnQueryTextListener {
                     }
                 } else {
                     _binding?.apply {
+                        wordTv.visibility = View.VISIBLE
+                        wordTv.text = word!!
                         termSv.visibility = View.GONE
                         wordLl.visibility = View.VISIBLE
                         wordErrorTv.visibility = View.INVISIBLE
@@ -123,6 +125,7 @@ class WordFragment : Fragment(),SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if(query!= null) {
+            word = query
             getWord(query)
         }
         return true
