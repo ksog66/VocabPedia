@@ -44,6 +44,10 @@ class WordAdapter(
         }
     }
 
+    override fun getItemId(position: Int): Long {
+        return allWord[position].id
+    }
+
     override fun getItemCount(): Int = allWord.size
 
     fun update(wordList:List<Word>) {

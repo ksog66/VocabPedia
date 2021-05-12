@@ -1,6 +1,10 @@
 package com.notchdev.vocabpedia.ui.feed
 
 import android.app.Dialog
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.Log
@@ -13,7 +17,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.notchdev.vocabpedia.R
 import com.notchdev.vocabpedia.VocabViewModel
 import com.notchdev.vocabpedia.VocabViewModelFactory
@@ -23,6 +29,9 @@ import com.notchdev.vocabpedia.data.source.repository.VocabRepository
 import com.notchdev.vocabpedia.data.source.local.WordDatabase
 import com.notchdev.vocabpedia.databinding.ReadMoreLayoutBinding
 import com.notchdev.vocabpedia.databinding.ScoreDialogLayoutBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -55,7 +64,83 @@ class FeedFragment : Fragment(), SearchView.OnQueryTextListener, TextToSpeech.On
             layoutManager = LinearLayoutManager(context)
             adapter = wordAdapter
         }
+        initSwap()
         return _binding?.root
+    }
+
+    private fun initSwap() {
+        val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+
+                if(direction == ItemTouchHelper.LEFT) {
+                    GlobalScope.launch(Dispatchers.IO) {
+                        viewModel.deleteWord(wordAdapter.getItemId(position))
+                    }
+                }
+                wordAdapter.notifyDataSetChanged()
+            }
+
+            override fun onChildDraw(
+                canvas: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
+                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                    val itemView = viewHolder.itemView
+
+                    val paint = Paint()
+                    val icon:Bitmap
+
+                    if(dX < 0) {
+                        icon = BitmapFactory.decodeResource(resources,R.drawable.icon_delete)
+
+                        paint.color = resources.getColor(R.color.gold)
+
+                        canvas.drawRect(
+                            itemView.right.toFloat() + dX,
+                            itemView.top.toFloat(),
+                            itemView.right.toFloat(),
+                            itemView.bottom.toFloat(),
+                            paint
+                        )
+
+                        canvas.drawBitmap(
+                            icon,
+                            itemView.right.toFloat() - icon.width,
+                            itemView.top.toFloat() + (itemView.bottom.toFloat() - itemView.top.toFloat() - icon.height.toFloat()) / 2,
+                            paint
+                        )
+                    }
+                    viewHolder.itemView.translationX = dX
+                } else {
+                    super.onChildDraw(
+                        canvas,
+                        recyclerView,
+                        viewHolder,
+                        dX,
+                        dY,
+                        actionState,
+                        isCurrentlyActive
+                    )
+                }
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(_binding?.feedRv)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,7 +152,7 @@ class FeedFragment : Fragment(), SearchView.OnQueryTextListener, TextToSpeech.On
                     findNavController().navigate(
                         R.id.action_navigate_to_navigation_quiz
                     )
-                }else {
+                } else {
                     val alertDialog = Dialog(requireContext())
                     alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                     alertDialog.setCancelable(true)

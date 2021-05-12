@@ -39,4 +39,8 @@ class VocabRepository(
         )
     }
 
+    suspend fun deleteWordFromDb(id:Long) {
+        db.getWordDao().delete(id)
+    }
+
 }

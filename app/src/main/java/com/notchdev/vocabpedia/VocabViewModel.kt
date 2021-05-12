@@ -59,4 +59,8 @@ class VocabViewModel(
         repository.addWord(term, shortDef)
     }
 
+    fun deleteWord(id:Long) = viewModelScope.launch {
+        repository.deleteWordFromDb(id)
+    }
+
 }
