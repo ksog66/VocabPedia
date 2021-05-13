@@ -1,6 +1,9 @@
 package com.notchdev.vocabpedia.ui.feed
 
 import android.app.Dialog
+import android.app.TimePickerDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
@@ -8,11 +11,10 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
 import android.widget.SearchView
+import android.widget.TimePicker
+import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +22,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.notchdev.vocabpedia.R
 import com.notchdev.vocabpedia.VocabViewModel
 import com.notchdev.vocabpedia.VocabViewModelFactory
@@ -29,10 +35,12 @@ import com.notchdev.vocabpedia.data.source.repository.VocabRepository
 import com.notchdev.vocabpedia.data.source.local.WordDatabase
 import com.notchdev.vocabpedia.databinding.ReadMoreLayoutBinding
 import com.notchdev.vocabpedia.databinding.ScoreDialogLayoutBinding
+import com.notchdev.vocabpedia.util.NotificationWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class FeedFragment : Fragment(), SearchView.OnQueryTextListener, TextToSpeech.OnInitListener {
@@ -41,11 +49,75 @@ class FeedFragment : Fragment(), SearchView.OnQueryTextListener, TextToSpeech.On
     private lateinit var viewModel: VocabViewModel
     private lateinit var wordAdapter: WordAdapter
     private lateinit var textToSpeech: TextToSpeech
+    private lateinit var sharedPref:SharedPreferences
+    private lateinit var myCalendar: Calendar
     private var listSize: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         textToSpeech = TextToSpeech(activity, this)
+        sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
+        setUpNotificationWorker()
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.reminder_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_schedule) {
+            selectTime()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun selectTime() {
+        myCalendar = Calendar.getInstance()
+        val timeSetListener =
+            TimePickerDialog.OnTimeSetListener { timePicker: TimePicker, hour: Int, minute: Int ->
+                myCalendar.set(Calendar.HOUR_OF_DAY, hour)
+                myCalendar.set(Calendar.MINUTE, minute)
+                myCalendar.set(Calendar.SECOND,0)
+                updateTime()
+            }
+        TimePickerDialog(
+            requireContext(),
+            timeSetListener,
+            myCalendar.get(Calendar.HOUR_OF_DAY),
+            myCalendar.get(Calendar.MINUTE),
+            false
+        ).show()
+
+    }
+
+    private fun updateTime() {
+        val time = myCalendar.time.time
+        val editor = sharedPref.edit()
+        editor.apply {
+            putLong("TIME",time)
+            apply()
+        }
+        Log.i("feed","$time")
+        setUpNotificationWorker()
+    }
+
+    private fun setUpNotificationWorker() {
+        val timePref = sharedPref.getLong("TIME",0)
+        val currentTime = Calendar.getInstance().time.time
+        val time = if(currentTime > timePref) currentTime - timePref+ TimeUnit.HOURS.toMillis(24) else timePref - currentTime
+        Log.i("feed","final Time=> $time")
+        val workerRequest = OneTimeWorkRequest.Builder(NotificationWorker::class.java)
+            .setInitialDelay(time,TimeUnit.MILLISECONDS)
+            .build()
+
+
+
+        WorkManager.getInstance(requireContext()).enqueue(workerRequest)
+
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,7 +154,7 @@ class FeedFragment : Fragment(), SearchView.OnQueryTextListener, TextToSpeech.On
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
 
-                if(direction == ItemTouchHelper.LEFT) {
+                if (direction == ItemTouchHelper.LEFT) {
                     GlobalScope.launch(Dispatchers.IO) {
                         viewModel.deleteWord(wordAdapter.getItemId(position))
                     }
@@ -99,14 +171,14 @@ class FeedFragment : Fragment(), SearchView.OnQueryTextListener, TextToSpeech.On
                 actionState: Int,
                 isCurrentlyActive: Boolean
             ) {
-                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
                     val itemView = viewHolder.itemView
 
                     val paint = Paint()
-                    val icon:Bitmap
+                    val icon: Bitmap
 
-                    if(dX < 0) {
-                        icon = BitmapFactory.decodeResource(resources,R.drawable.icon_delete)
+                    if (dX < 0) {
+                        icon = BitmapFactory.decodeResource(resources, R.drawable.icon_delete)
 
                         paint.color = resources.getColor(R.color.gold)
 

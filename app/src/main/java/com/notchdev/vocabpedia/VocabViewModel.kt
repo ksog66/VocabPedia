@@ -1,7 +1,13 @@
 package com.notchdev.vocabpedia
 
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.ConnectivityManager.*
+import android.net.NetworkCapabilities.*
+import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,7 +27,7 @@ class VocabViewModel(
     private val _wordData = MutableLiveData<ThesarusItem>(null)
     val wordData: LiveData<ThesarusItem> = _wordData
 
-    private val _dataFetchState = MutableLiveData<Boolean>()
+    private val _dataFetchState = MutableLiveData<Boolean>(false)
     val dataFetchState: LiveData<Boolean> = _dataFetchState
 
     private val _isLoading = MutableLiveData<Boolean>()
@@ -29,6 +35,14 @@ class VocabViewModel(
 
     val allWord: LiveData<List<Word>> = repository.allWords
 
+    fun findWord(searchTerm:String) {
+        if(hasInternetConnection()) {
+            searchWord(searchTerm)
+        } else {
+            _dataFetchState.postValue(false)
+            Toast.makeText(getApplication(),"No Internet Connection",Toast.LENGTH_SHORT).show()
+        }
+    }
 
     fun searchWord(searchTerm: String) {
         _isLoading.postValue(true)
@@ -55,8 +69,37 @@ class VocabViewModel(
         }
     }
 
+    private fun hasInternetConnection():Boolean{
+        val connectivityManger= getApplication<VocabPediaApplication>().getSystemService(
+            Context.CONNECTIVITY_SERVICE
+        ) as ConnectivityManager
+
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
+            val activeNetwork=connectivityManger.activeNetwork ?: return false
+            val capabilities=connectivityManger.getNetworkCapabilities(activeNetwork) ?: return false
+
+            return when{
+                capabilities.hasTransport(TRANSPORT_WIFI) ||
+                        capabilities.hasTransport(TRANSPORT_CELLULAR) ||
+                        capabilities.hasTransport(TRANSPORT_ETHERNET) -> true
+
+                else-> false
+            }
+        }else{
+            connectivityManger.activeNetworkInfo?.run {
+                return when(type){
+                    TYPE_WIFI,
+                    TYPE_MOBILE,
+                    TYPE_ETHERNET -> true
+                    else -> false
+                }
+            }
+        }
+        return false
+    }
+
     fun addWord(term: String, shortDef: String) = viewModelScope.launch(Dispatchers.IO) {
-        repository.addWord(term, shortDef)
+            repository.addWord(term, shortDef)
     }
 
     fun deleteWord(id:Long) = viewModelScope.launch {

@@ -67,7 +67,7 @@ class WordFragment : Fragment(),SearchView.OnQueryTextListener {
     }
 
     private fun getWord(wordQuery:String) {
-        viewModel.searchWord(wordQuery)
+        viewModel.findWord(wordQuery)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
