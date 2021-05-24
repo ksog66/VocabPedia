@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 def apiKeyFile = rootProject.file("apikey.properties")
 def apiKeyProperties = new Properties()
@@ -61,6 +62,10 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
+
+    implementation platform('com.google.firebase:firebase-bom:28.0.1')
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
